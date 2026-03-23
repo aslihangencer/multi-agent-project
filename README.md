@@ -1,87 +1,69 @@
-# Multi-Agent Workshop
+# 🚀 Multi-Agent Framework with Vertex AI  
+### Building collaborative AI systems with Vertex AI & Gemini
 
-Bu proje, Google Cloud üzerinde çalışan çoklu ajan (multi-agent) sistemlerini göstermek için hazırlanmıştır.
+---
 
-## Kurulum (Setup)
+## 🧠 Overview
 
-Örnekleri çalıştırmadan önce, Cloud Shell veya yerel `gcloud` kurulumunuzda aşağıdaki adımları tamamladığınızdan emin olun.
+I built this project to experiment with multi-agent systems using Vertex AI and Gemini.
 
-### 1. Google Cloud Projesini Ayarlayın (gcloud Config)
+The main idea is simple: instead of relying on a single model, multiple agents handle different parts of a task. Each agent has its own role, and they work together to produce a better final result.
 
-Projenizin seçili olup olmadığını kontrol edin:
+Right now, the system can break down complex tasks, assign them to agents, and combine their outputs into a structured response. It’s still evolving, but it already works well for basic workflows.
 
-```bash
-gcloud config list
-```
+---
 
-Çıktıda `project = your-google-cloud-project-id` görmelisiniz. Eğer ayarlı değilse, proje ID'nizi ayarlayın:
+## ❓ Why this project?
 
-```bash
-gcloud config set core/project your-google-cloud-project-id
-```
+Most AI tools today follow a very straightforward pattern — input goes in, output comes out.
 
-Eğer Cloud Shell'de değilseniz (yerel bilgisayarınızda çalışıyorsanız), kimlik doğrulaması yapın:
+That works, but it often misses:
+•⁠  ⁠different perspectives  
+•⁠  ⁠internal validation  
+•⁠  ⁠flexibility when tasks get complex  
 
-```bash
-gcloud auth application-default login
-```
+I wanted to try a different approach.
 
-### 2. Vertex AI API'yi Etkinleştirin
+Instead of one model doing everything, this project lets multiple agents:
+•⁠  ⁠think separately  
+•⁠  ⁠interact with each other  
+•⁠  ⁠refine the final result together  
 
-```bash
-gcloud services enable aiplatform.googleapis.com
-```
+The goal is to move from “single response AI” → to something closer to a *collaborative system*.
 
-### 3. Kodu İndirin (Get the Code)
+---
 
-Repository'i klonlayın:
+## ✨ Key Features
 
-```bash
-git clone https://github.com/nisailhan/multi-agent-workshop.git
-```
+•⁠  ⁠🧩 *Model-agnostic setup*  
+  Works with Vertex AI, but can be adapted to other providers
 
-### 4. Python Ortamını Hazırlayın
+•⁠  ⁠🤖 *Basic agent orchestration*  
+  Tasks are split and distributed between agents
 
-Proje klasörüne gidin, sanal ortam oluşturun ve aktif edin:
+•⁠  ⁠🔄 *Agent communication*  
+  Agents can exchange outputs and build on each other
 
-```bash
-cd multi-agent-workshop
-python3 -m venv .venv
-source .venv/bin/activate
-```
+•⁠  ⁠🧠 *Context handling*  
+  Shared memory between agents (still improving)
 
-Gerekli kütüphaneleri (ADK ve diğerleri) yükleyin:
+•⁠  ⁠⚙️ *Modular structure*  
+  Easy to add new agents or tools
 
-```bash
-pip install -r requirements.txt
-```
+•⁠  ⁠🛡️ *Output checking*  
+  Some basic validation between agents
 
-### 5. Google AI veya Vertex AI Konfigürasyonu
+---
 
-Google AI (Gemini API Key) veya Vertex AI kullanmak için ortam değişkenlerini ayarlamanız gerekmektedir.
+## 🏗️ Architecture Overview
 
-**Vertex AI için Örnek Konfigürasyon:**
+At a high level, the system uses one orchestrator and multiple specialized agents.
 
-Bir `.env` dosyası oluşturun veya aşağıdaki değişkenleri export edin:
-
-```bash
-export GOOGLE_GENAI_USE_VERTEXAI=TRUE
-export GOOGLE_CLOUD_PROJECT=your-google-cloud-project-id
-export GOOGLE_CLOUD_LOCATION=us-central1
-```
-
-**Google AI Studio (API Key) Kullanacaksanız:**
-
-```bash
-export GOOGLE_API_KEY="YOUR_API_KEY_HERE"
-```
-
-## Projeyi Çalıştırma
-
-Tüm ayarlamalar bittikten sonra projeyi çalıştırabilirsiniz.
-
-**Manuel Orkestrasyon Örneği:**
-
-```bash
-python manual_orchestration_script.py "Generative AI hakkında bilgi ver"
-```
+```mermaid
+graph TD
+    User((User)) --> Orchestrator[Orchestrator Agent]
+    Orchestrator --> AgentA[Research Agent]
+    Orchestrator --> AgentB[Code Agent]
+    AgentA <--> AgentB
+    AgentA --> VertexAI[Vertex AI / Gemini]
+    AgentB --> VertexAI
